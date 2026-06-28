@@ -226,8 +226,234 @@
 </main>
 
 <script>
-// ── CONFIGURACIÓN ──────────────────────────────────────────────
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyPEb-HsfXO17XpbTwZEq7eo022uCLea8boT9VUr_W5_jePkxdK5lKzSF31cJPOI9RCnw/exec';
+
+// ── FLAG LOOKUP ───────────────────────────────────────────────
+const FLAG = {
+  'Sudáfrica':'za','Canadá':'ca','Brasil':'br','Japón':'jp',
+  'Alemania':'de','Paraguay':'py','Países Bajos':'nl','Marruecos':'ma',
+  'Costa de Marfil':'ci','Noruega':'no','Francia':'fr','Suecia':'se',
+  'México':'mx','Ecuador':'ec','Inglaterra':'gb-eng','Congo RD':'cd',
+  'Bélgica':'be','Senegal':'sn','Estados Unidos':'us','Bosnia-Herz.':'ba',
+  'España':'es','Austria':'at','Portugal':'pt','Croacia':'hr',
+  'Suiza':'ch','Argelia':'dz','Australia':'au','Egipto':'eg',
+  'Argentina':'ar','Cabo Verde':'cv','Colombia':'co','Ghana':'gh',
+};
+
+// ── R32 MATCH DEFINITIONS ─────────────────────────────────────
+const R32 = [
+  { id:'r32_m1',  date:'28 Jun 14:00', ta:'Sudáfrica',       tb:'Canadá' },
+  { id:'r32_m2',  date:'29 Jun 12:00', ta:'Brasil',          tb:'Japón' },
+  { id:'r32_m3',  date:'29 Jun 15:30', ta:'Alemania',        tb:'Paraguay' },
+  { id:'r32_m4',  date:'29 Jun 20:00', ta:'Países Bajos',    tb:'Marruecos' },
+  { id:'r32_m5',  date:'30 Jun 12:00', ta:'Costa de Marfil', tb:'Noruega' },
+  { id:'r32_m6',  date:'30 Jun 16:00', ta:'Francia',         tb:'Suecia' },
+  { id:'r32_m7',  date:'30 Jun 20:00', ta:'México',          tb:'Ecuador' },
+  { id:'r32_m8',  date:'01 Jul 11:00', ta:'Inglaterra',      tb:'Congo RD' },
+  { id:'r32_m9',  date:'01 Jul 15:00', ta:'Bélgica',         tb:'Senegal' },
+  { id:'r32_m10', date:'01 Jul 19:00', ta:'Estados Unidos',  tb:'Bosnia-Herz.' },
+  { id:'r32_m11', date:'02 Jul 14:00', ta:'España',          tb:'Austria' },
+  { id:'r32_m12', date:'02 Jul 18:00', ta:'Portugal',        tb:'Croacia' },
+  { id:'r32_m13', date:'02 Jul 22:00', ta:'Suiza',           tb:'Argelia' },
+  { id:'r32_m14', date:'03 Jul 13:00', ta:'Australia',       tb:'Egipto' },
+  { id:'r32_m15', date:'03 Jul 17:00', ta:'Argentina',       tb:'Cabo Verde' },
+  { id:'r32_m16', date:'03 Jul 20:30', ta:'Colombia',        tb:'Ghana' },
+];
+
+// ── BRACKET WIRING (same as form) ────────────────────────────
+// Each entry: { srcA, srcB, gaKey, gbKey, penKey, date, label }
+const DYN_MATCHES = [
+  // Octavos
+  { id:'r16_m1', srcA:'r32_m1',  srcB:'r32_m4',  ga:'r16_m1_ga', gb:'r16_m1_gb', pen:'r16_m1_pen', date:'~4-5 Jul',  label:'Octavos 1' },
+  { id:'r16_m2', srcA:'r32_m2',  srcB:'r32_m5',  ga:'r16_m2_ga', gb:'r16_m2_gb', pen:'r16_m2_pen', date:'~5-6 Jul',  label:'Octavos 2' },
+  { id:'r16_m3', srcA:'r32_m3',  srcB:'r32_m6',  ga:'r16_m3_ga', gb:'r16_m3_gb', pen:'r16_m3_pen', date:'~4-5 Jul',  label:'Octavos 3' },
+  { id:'r16_m4', srcA:'r32_m7',  srcB:'r32_m8',  ga:'r16_m4_ga', gb:'r16_m4_gb', pen:'r16_m4_pen', date:'~5-6 Jul',  label:'Octavos 4' },
+  { id:'r16_m5', srcA:'r32_m10', srcB:'r32_m9',  ga:'r16_m5_ga', gb:'r16_m5_gb', pen:'r16_m5_pen', date:'~6-7 Jul',  label:'Octavos 5' },
+  { id:'r16_m6', srcA:'r32_m12', srcB:'r32_m11', ga:'r16_m6_ga', gb:'r16_m6_gb', pen:'r16_m6_pen', date:'~6-7 Jul',  label:'Octavos 6' },
+  { id:'r16_m7', srcA:'r32_m13', srcB:'r32_m16', ga:'r16_m7_ga', gb:'r16_m7_gb', pen:'r16_m7_pen', date:'~7-8 Jul',  label:'Octavos 7' },
+  { id:'r16_m8', srcA:'r32_m15', srcB:'r32_m14', ga:'r16_m8_ga', gb:'r16_m8_gb', pen:'r16_m8_pen', date:'~7-8 Jul',  label:'Octavos 8' },
+  // Cuartos
+  { id:'qf_m1',  srcA:'r16_m3',  srcB:'r16_m1',  ga:'qf_m1_ga',  gb:'qf_m1_gb',  pen:'qf_m1_pen',  date:'~9 Jul',   label:'Cuartos 1' },
+  { id:'qf_m2',  srcA:'r16_m6',  srcB:'r16_m5',  ga:'qf_m2_ga',  gb:'qf_m2_gb',  pen:'qf_m2_pen',  date:'~10 Jul',  label:'Cuartos 2' },
+  { id:'qf_m3',  srcA:'r16_m2',  srcB:'r16_m4',  ga:'qf_m3_ga',  gb:'qf_m3_gb',  pen:'qf_m3_pen',  date:'~9 Jul',   label:'Cuartos 3' },
+  { id:'qf_m4',  srcA:'r16_m8',  srcB:'r16_m7',  ga:'qf_m4_ga',  gb:'qf_m4_gb',  pen:'qf_m4_pen',  date:'~10 Jul',  label:'Cuartos 4' },
+  // Semis
+  { id:'sf_m1',  srcA:'qf_m1',   srcB:'qf_m2',   ga:'sf_m1_ga',  gb:'sf_m1_gb',  pen:'sf_m1_pen',  date:'~14 Jul',  label:'Semifinal 1' },
+  { id:'sf_m2',  srcA:'qf_m3',   srcB:'qf_m4',   ga:'sf_m2_ga',  gb:'sf_m2_gb',  pen:'sf_m2_pen',  date:'~15 Jul',  label:'Semifinal 2' },
+  // 3er lugar (losers of semis — special case)
+  { id:'tp_m1',  srcA:'sf_m1_loser', srcB:'sf_m2_loser', ga:'tp_m1_ga', gb:'tp_m1_gb', pen:'tp_m1_pen', date:'~18 Jul', label:'3er Lugar' },
+  // Final
+  { id:'final',  srcA:'sf_m1',   srcB:'sf_m2',   ga:'final_ga',  gb:'final_gb',  pen:'final_pen',  date:'19 Jul',   label:'Final' },
+];
+
+// ── COMPUTE WINNER/LOSER for a match given data row ───────────
+function getWinnerLoser(d, ta, tb, gaKey, gbKey, penKey) {
+  const ga = d[gaKey] !== undefined && d[gaKey] !== '' ? parseInt(d[gaKey]) : null;
+  const gb = d[gbKey] !== undefined && d[gbKey] !== '' ? parseInt(d[gbKey]) : null;
+  if (ga === null || gb === null) return { winner: null, loser: null };
+  if (ga > gb) return { winner: ta, loser: tb };
+  if (gb > ga) return { winner: tb, loser: ta };
+  // Empate → penales
+  const pen = d[penKey] || '';
+  if (pen) return { winner: pen, loser: (pen === ta ? tb : ta) };
+  return { winner: null, loser: null };
+}
+
+// ── BUILD TEAM MAP for all rounds given a data row ────────────
+function buildTeamMap(d) {
+  // teams[matchId] = { ta, tb, winner, loser }
+  const teams = {};
+
+  // R32
+  for (const m of R32) {
+    const { winner, loser } = getWinnerLoser(d, m.ta, m.tb, m.id+'_a', m.id+'_b', m.id+'_pen');
+    teams[m.id] = { ta: m.ta, tb: m.tb, winner, loser };
+  }
+
+  // Dynamic rounds in order
+  for (const m of DYN_MATCHES) {
+    let ta = null, tb = null;
+    if (m.srcA.endsWith('_loser')) {
+      ta = (teams[m.srcA.replace('_loser','')] || {}).loser || null;
+    } else {
+      ta = (teams[m.srcA] || {}).winner || null;
+    }
+    if (m.srcB.endsWith('_loser')) {
+      tb = (teams[m.srcB.replace('_loser','')] || {}).loser || null;
+    } else {
+      tb = (teams[m.srcB] || {}).winner || null;
+    }
+    const { winner, loser } = getWinnerLoser(d, ta, tb, m.ga, m.gb, m.pen);
+    teams[m.id] = { ta, tb, winner, loser };
+  }
+
+  return teams;
+}
+
+// ── RENDER HELPERS ────────────────────────────────────────────
+function flagImg(team) {
+  const code = team && FLAG[team];
+  if (!code) return '';
+  return `<img src="https://flagcdn.com/${code}.svg" alt="${team}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;border:1px solid #30363D;vertical-align:middle;margin-right:4px">`;
+}
+
+function matchRow(date, ta, tb, ga, gb, pen) {
+  const hasScore = ga !== '' && gb !== '' && ga !== null && gb !== null;
+  const scoreText = hasScore ? `${ga} – ${gb}` : '— – —';
+  const scoreClass = hasScore ? 'score-view' : 'score-view empty';
+  const penHtml = pen ? `<span class="pen-badge">Penales: ${pen}</span>` : '';
+  const teamA = ta || '<span style="color:var(--muted);font-size:11px">Por definir</span>';
+  const teamB = tb || '<span style="color:var(--muted);font-size:11px">Por definir</span>';
+
+  return `<div class="match-row">
+    <span class="date">${date}</span>
+    <div class="match-teams-view">
+      <div class="team-view">${flagImg(ta)}<span>${teamA}</span></div>
+      <div class="${scoreClass}">${scoreText}</div>
+      <div class="team-view"><span>${teamB}</span>${flagImg(tb)}</div>
+    </div>
+    ${penHtml}
+  </div>`;
+}
+
+// ── RENDER ALL PICKS ──────────────────────────────────────────
+function renderPicks(d) {
+  const teams = buildTeamMap(d);
+  let html = '';
+
+  // R32
+  html += `<div class="round-section">
+    <div class="round-header">
+      <span class="round-badge">R32</span>
+      <span class="round-title">RONDA DE 32</span>
+    </div>`;
+  for (const m of R32) {
+    html += matchRow(m.date, m.ta, m.tb, d[m.id+'_a'], d[m.id+'_b'], d[m.id+'_pen']);
+  }
+  html += `</div>`;
+
+  // Dynamic rounds
+  const rounds = [
+    { ids: DYN_MATCHES.slice(0,8),  badge:'R16', title:'OCTAVOS DE FINAL', final:false },
+    { ids: DYN_MATCHES.slice(8,12), badge:'QF',  title:'CUARTOS DE FINAL', final:false },
+    { ids: DYN_MATCHES.slice(12,14),badge:'SF',  title:'SEMIFINALES',       final:false },
+    { ids: DYN_MATCHES.slice(14,15),badge:'3°',  title:'TERCER LUGAR',      final:false },
+    { ids: DYN_MATCHES.slice(15,16),badge:'🏆',  title:'FINAL',             final:true  },
+  ];
+
+  for (const rnd of rounds) {
+    const badgeStyle = rnd.final ? 'style="background:var(--amarillo);color:#000"' : '';
+    const titleStyle = rnd.final ? 'style="color:var(--amarillo)"' : '';
+    html += `<div class="round-section">
+      <div class="round-header">
+        <span class="round-badge" ${badgeStyle}>${rnd.badge}</span>
+        <span class="round-title" ${titleStyle}>${rnd.title}</span>
+      </div>`;
+    for (const m of rnd.ids) {
+      const t = teams[m.id] || {};
+      html += matchRow(m.date, t.ta, t.tb, d[m.ga], d[m.gb], d[m.pen]);
+    }
+    html += `</div>`;
+  }
+
+  return html;
+}
+
+// ── STATE & LOAD ──────────────────────────────────────────────
+let allData = [];
+
+async function loadData() {
+  try {
+    const res = await fetch(APPS_SCRIPT_URL + '?action=getAll');
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error);
+
+    const byName = {};
+    for (const row of json.data) {
+      const name = (row.nombre || '').trim();
+      if (!name) continue;
+      if (!byName[name] || row.timestamp > byName[name].timestamp) byName[name] = row;
+    }
+    allData = Object.values(byName).sort((a,b) => a.nombre.localeCompare(b.nombre));
+
+    const sel = document.getElementById('nombre-select');
+    sel.innerHTML = '<option value="">— Selecciona tu nombre —</option>';
+    allData.forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r.nombre;
+      opt.textContent = r.nombre;
+      sel.appendChild(opt);
+    });
+  } catch(err) {
+    document.getElementById('nombre-select').innerHTML = '<option value="">Error al cargar</option>';
+    document.getElementById('content').innerHTML =
+      `<div class="state-msg">⚠ No se pudo conectar.<br><small>${err.message}</small></div>`;
+  }
+}
+
+document.getElementById('nombre-select').addEventListener('change', function() {
+  const name = this.value;
+  const meta = document.getElementById('meta');
+  const content = document.getElementById('content');
+  if (!name) {
+    meta.style.display = 'none';
+    content.innerHTML = '<div class="state-msg">Selecciona un participante para ver sus pronósticos.</div>';
+    return;
+  }
+  const row = allData.find(r => r.nombre === name);
+  if (!row) { content.innerHTML = '<div class="state-msg">No se encontraron datos.</div>'; return; }
+
+  meta.style.display = 'block';
+  const ts = new Date(row.timestamp);
+  document.getElementById('meta-fecha').textContent =
+    ts.toLocaleDateString('es-MX', { day:'2-digit', month:'short' }) + ' ' +
+    ts.toLocaleTimeString('es-MX', { hour:'2-digit', minute:'2-digit' });
+
+  content.innerHTML = renderPicks(row);
+});
+
+loadData();
+</script>
 
 // ── DATOS DEL BRACKET ──────────────────────────────────────────
 const FLAG = {
