@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pronósticos Mundial 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --verde:      #3B82F6;
+    --verde-dark: #1D4ED8;
+    --rojo:       #D62828;
+    --fondo:      #0D1117;
+    --card:       #161B22;
+    --borde:      #30363D;
+    --texto:      #E6EDF3;
+    --muted:      #8B949E;
+    --amarillo:   #F0B429;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #0D1117 0%, #161B22 50%, #0D1117 100%);
+    border-bottom: 1px solid var(--borde);
+    padding: 28px 24px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 50% -10%, rgba(59,130,246,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .trophy { font-size: 48px; display: block; margin-bottom: 8px; }
+  header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 7vw, 54px);
+    letter-spacing: 3px;
+    color: #fff;
+    line-height: 1;
+  }
+  header h1 span { color: var(--verde); }
+  header p.subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 6px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 28px 16px 60px;
+  }
+
+  /* ── PUNTUACIÓN ── */
+  .scoring-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 560px) { .scoring-wrap { grid-template-columns: 1fr; } }
+  .scoring-box {
+    background: var(--card);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .scoring-box h3 {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amarillo);
+    margin-bottom: 10px;
+  }
+  .scoring-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .scoring-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .scoring-item .pts {
+    color: #fff;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    min-width: 46px;
+    text-align: center;
+  }
+  .pts-red    { background: #B22222; }
+  .pts-yellow { background: #B8860B; }
+  .pts-green  { background: #1D4ED8; }
+  .pts-bonus  { background: #2A4A7F; }
+
+  /* ── PARTICIPANTE ── */
+  .participant-section {
+    background: var(--card);
+    border: 1px solid var(--verde);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 32px;
+    box-shadow: 0 0 20px rgba(59,130,246,0.08);
+  }
+  .participant-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--verde);
+    margin-bottom: 14px;
+  }
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  input[type="text"], input[type="number"], select {
+    width: 100%;
+    background: var(--fondo);
+    border: 1px solid var(--borde);
+    border-radius: 7px;
+    color: var(--texto);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+  }
+  input:focus, select:focus { border-color: var(--verde); }
+  input::placeholder { color: var(--muted); }
+
+  /* ── RONDAS ── */
+  .round-section { margin-bottom: 36px; }
+  .round-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--borde);
+  }
+  .round-badge {
+    background: var(--verde);
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  .round-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 2px;
+    color: #fff;
+  }
+  .round-pts {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.3;
+  }
+  .round-pts strong { color: var(--amarillo); }
+
+  /* ── MATCH CARD ── */
+  .match-card {
+    background: var(--card);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s;
+  }
+  .match-card:hover { border-color: #444D56; }
+  .match-date {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .match-teams {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .team-name {
+    flex: 1;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--texto);
+  }
+  .team-name.right { text-align: right; }
+  /* Dynamic team labels (not inputs) */
+  .team-label {
+    flex: 1;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--texto);
+    padding: 4px 0;
+  }
+  .team-label.right { text-align: right; }
+  .team-label.placeholder { color: var(--muted); font-weight: 400; font-style: italic; }
+  .vs-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  /* ── SCORE INPUT ── */
+  .score-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .score-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .score-input-group.right { flex-direction: row-reverse; }
+  input.score-num {
+    width: 52px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 6px 4px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .score-dash {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--muted);
+    flex-shrink: 0;
+    padding: 0 4px;
+  }
+
+  /* ── MATCH CARD LAYOUT (all rounds) ── */
+  .match-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .match-side {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .match-side.right { flex-direction: row-reverse; }
+  .flag-sm {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--borde);
+    background: #222;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+  }
+  .team-txt {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--texto);
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  .team-txt.muted { color: var(--muted); font-weight: 400; font-style: italic; }
+  .match-center {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .score-inline {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  input.score-num-sm {
+    width: 64px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 5px 2px;
+    border-radius: 8px;
+    background: var(--fondo);
+    border: 1px solid var(--borde);
+    color: var(--texto);
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    /* Show native spinners on all devices */
+    -moz-appearance: number-input;
+  }
+  input.score-num-sm::-webkit-inner-spin-button,
+  input.score-num-sm::-webkit-outer-spin-button {
+    opacity: 1;
+    height: 32px;
+    cursor: pointer;
+  }
+  input.score-num-sm:focus { border-color: var(--verde); }
+  .score-dash-sm {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--muted);
+    padding: 0 2px;
+  }
+  .tiebreak {
+    display: none;
+    background: rgba(240,180,41,0.06);
+    border: 1px solid rgba(240,180,41,0.25);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 10px;
+  }
+  .tiebreak.visible { display: block; }
+  .tiebreak label {
+    color: var(--amarillo);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+  }
+  .tiebreak select { border-color: rgba(240,180,41,0.4); }
+  .tiebreak select:focus { border-color: var(--amarillo); }
+
+  /* ── SUBMIT ── */
+  .submit-section {
+    position: sticky;
+    bottom: 16px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .submit-warning {
+    background: rgba(240,180,41,0.1);
+    border: 1px solid rgba(240,180,41,0.3);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 12px;
+    color: var(--amarillo);
+    text-align: center;
+    max-width: 520px;
+    width: 100%;
+  }
+  button[type="submit"] {
+    width: 100%;
+    max-width: 520px;
+    background: var(--verde);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    padding: 16px 32px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 4px 18px rgba(59,130,246,0.35);
+  }
+  button[type="submit"]:hover { background: var(--verde-dark); }
+  button[type="submit"]:active { transform: scale(0.98); }
+  button[type="submit"]:disabled {
+    background: #333;
+    color: var(--muted);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  #status {
+    display: none;
+    max-width: 520px;
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+  }
+  #status.ok  { display:block; background:rgba(59,130,246,0.15); border:1px solid var(--verde); color:var(--verde); }
+  #status.err { display:block; background:rgba(214,40,40,0.10); border:1px solid var(--rojo);  color:#ff6b6b; }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+    padding: 20px 16px;
+    letter-spacing: 1px;
+  }
+  .req { color: var(--rojo); margin-left: 2px; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="trophy">🏆</span>
+  <h1>PRONÓSTICOS <span>MUNDIAL</span> 2026</h1>
+  <p class="subtitle">Fase Eliminatoria</p>
+</header>
+
+<main>
+
+  <!-- PUNTUACIÓN -->
+  <div class="scoring-wrap">
+    <div class="scoring-box">
+      <h3>① Marcador y resultado</h3>
+      <div class="scoring-list">
+        <div class="scoring-item"><span class="pts pts-red">5 pts</span> Marcador exacto (90' + TE)</div>
+        <div class="scoring-item"><span class="pts pts-yellow">4 pts</span> Diferencia de goles correcta + ganador</div>
+        <div class="scoring-item"><span class="pts pts-green">3 pts</span> Solo resultado correcto</div>
+      </div>
+    </div>
+    <div class="scoring-box">
+      <h3>② Bonus por equipo ganador</h3>
+      <div class="scoring-list">
+        <div class="scoring-item"><span class="pts pts-bonus">+2 pts</span> Octavos de Final</div>
+        <div class="scoring-item"><span class="pts pts-bonus">+3 pts</span> Cuartos de Final</div>
+        <div class="scoring-item"><span class="pts pts-bonus">+4 pts</span> Semifinal</div>
+        <div class="scoring-item"><span class="pts pts-bonus">+5 pts</span> Final</div>
+        <div class="scoring-item"><span class="pts pts-bonus">+3 pts</span> 3er Lugar</div>
+      </div>
+    </div>
+  </div>
+
+  <form id="quiniela-form">
+
+    <!-- PARTICIPANTE -->
+    <div class="participant-section">
+      <h2>TUS DATOS</h2>
+      <div style="max-width:260px">
+        <label for="nombre">Nombre <span class="req">*</span></label>
+        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" maxlength="10" required>
+      </div>
+    </div>
+
+    <!-- AVISO EMPATE -->
+    <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.35);border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:flex-start;gap:10px;">
+      <span style="font-size:20px;flex-shrink:0">⚽</span>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#3B82F6;letter-spacing:0.5px;margin-bottom:3px;">EMPATE EN TIEMPO REGULAR + TIEMPO EXTRA</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.5;">Los pronósticos de marcador cuentan hasta el final del tiempo extra (90' + 30'). Si pronosticas empate, deberás indicar qué equipo avanza en penales — el marcador de penales <strong style="color:var(--texto)">no</strong> cuenta para los puntos.</div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         RONDA DE 32
+    ═══════════════════════════════════════ -->
+    <div class="round-section">
+      <div class="round-header">
+        <span class="round-badge">R32</span>
+        <span class="round-title">RONDA DE 32</span>
+
+      </div>
+
+      <div class="match-card">
+        <div class="match-date">Dom 28 Jun · Los Ángeles · 14:00 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/za.svg" alt="Sudáfrica">
+            <span class="team-txt">Sudáfrica</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m1_a" min="0" max="99" placeholder="" required data-match="r32_m1" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m1_b" min="0" max="99" placeholder="" required data-match="r32_m1" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/ca.svg" alt="Canadá">
+            <span class="team-txt">Canadá</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m1">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m1_pen" data-tb="r32_m1">
+            <option value="">Selecciona…</option>
+            <option value="Sudáfrica">Sudáfrica</option>
+            <option value="Canadá">Canadá</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Lun 29 Jun · Houston · 12:00 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/br.svg" alt="Brasil">
+            <span class="team-txt">Brasil</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m2_a" min="0" max="99" placeholder="" required data-match="r32_m2" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m2_b" min="0" max="99" placeholder="" required data-match="r32_m2" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/jp.svg" alt="Japón">
+            <span class="team-txt">Japón</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m2">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m2_pen" data-tb="r32_m2">
+            <option value="">Selecciona…</option>
+            <option value="Brasil">Brasil</option>
+            <option value="Japón">Japón</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Lun 29 Jun · Boston · 15:30 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/de.svg" alt="Alemania">
+            <span class="team-txt">Alemania</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m3_a" min="0" max="99" placeholder="" required data-match="r32_m3" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m3_b" min="0" max="99" placeholder="" required data-match="r32_m3" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/py.svg" alt="Paraguay">
+            <span class="team-txt">Paraguay</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m3">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m3_pen" data-tb="r32_m3">
+            <option value="">Selecciona…</option>
+            <option value="Alemania">Alemania</option>
+            <option value="Paraguay">Paraguay</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Lun 29 Jun · Monterrey · 20:00 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/nl.svg" alt="Países Bajos">
+            <span class="team-txt">Países Bajos</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m4_a" min="0" max="99" placeholder="" required data-match="r32_m4" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m4_b" min="0" max="99" placeholder="" required data-match="r32_m4" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/ma.svg" alt="Marruecos">
+            <span class="team-txt">Marruecos</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m4">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m4_pen" data-tb="r32_m4">
+            <option value="">Selecciona…</option>
+            <option value="Países Bajos">Países Bajos</option>
+            <option value="Marruecos">Marruecos</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Mar 30 Jun · Dallas · 12:00 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/ci.svg" alt="Costa de Marfil">
+            <span class="team-txt">Costa de Marfil</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m5_a" min="0" max="99" placeholder="" required data-match="r32_m5" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m5_b" min="0" max="99" placeholder="" required data-match="r32_m5" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/no.svg" alt="Noruega">
+            <span class="team-txt">Noruega</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m5">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m5_pen" data-tb="r32_m5">
+            <option value="">Selecciona…</option>
+            <option value="Costa de Marfil">Costa de Marfil</option>
+            <option value="Noruega">Noruega</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Mar 30 Jun · Nueva York/NJ · 16:00 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/fr.svg" alt="Francia">
+            <span class="team-txt">Francia</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m6_a" min="0" max="99" placeholder="" required data-match="r32_m6" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m6_b" min="0" max="99" placeholder="" required data-match="r32_m6" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/se.svg" alt="Suecia">
+            <span class="team-txt">Suecia</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m6">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m6_pen" data-tb="r32_m6">
+            <option value="">Selecciona…</option>
+            <option value="Francia">Francia</option>
+            <option value="Suecia">Suecia</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Mar 30 Jun · Ciudad de México · 20:00 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/mx.svg" alt="México">
+            <span class="team-txt">México</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m7_a" min="0" max="99" placeholder="" required data-match="r32_m7" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m7_b" min="0" max="99" placeholder="" required data-match="r32_m7" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/ec.svg" alt="Ecuador">
+            <span class="team-txt">Ecuador</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m7">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m7_pen" data-tb="r32_m7">
+            <option value="">Selecciona…</option>
+            <option value="México">México</option>
+            <option value="Ecuador">Ecuador</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Mié 1 Jul · Atlanta · 11:00 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/gb-eng.svg" alt="Inglaterra">
+            <span class="team-txt">Inglaterra</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m8_a" min="0" max="99" placeholder="" required data-match="r32_m8" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m8_b" min="0" max="99" placeholder="" required data-match="r32_m8" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/cd.svg" alt="Congo RD">
+            <span class="team-txt">Congo RD</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m8">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m8_pen" data-tb="r32_m8">
+            <option value="">Selecciona…</option>
+            <option value="Inglaterra">Inglaterra</option>
+            <option value="Congo RD">Congo RD</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Mié 1 Jul · Seattle · 15:00 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/be.svg" alt="Bélgica">
+            <span class="team-txt">Bélgica</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m9_a" min="0" max="99" placeholder="" required data-match="r32_m9" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m9_b" min="0" max="99" placeholder="" required data-match="r32_m9" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/sn.svg" alt="Senegal">
+            <span class="team-txt">Senegal</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m9">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m9_pen" data-tb="r32_m9">
+            <option value="">Selecciona…</option>
+            <option value="Bélgica">Bélgica</option>
+            <option value="Senegal">Senegal</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Mié 1 Jul · San Francisco · 19:00 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/us.svg" alt="Estados Unidos">
+            <span class="team-txt">Estados Unidos</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m10_a" min="0" max="99" placeholder="" required data-match="r32_m10" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m10_b" min="0" max="99" placeholder="" required data-match="r32_m10" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/ba.svg" alt="Bosnia-Herz.">
+            <span class="team-txt">Bosnia-Herz.</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m10">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m10_pen" data-tb="r32_m10">
+            <option value="">Selecciona…</option>
+            <option value="Estados Unidos">Estados Unidos</option>
+            <option value="Bosnia-Herz.">Bosnia-Herz.</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Jue 2 Jul · Los Ángeles · 14:00 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/es.svg" alt="España">
+            <span class="team-txt">España</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m11_a" min="0" max="99" placeholder="" required data-match="r32_m11" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m11_b" min="0" max="99" placeholder="" required data-match="r32_m11" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/at.svg" alt="Austria">
+            <span class="team-txt">Austria</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m11">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m11_pen" data-tb="r32_m11">
+            <option value="">Selecciona…</option>
+            <option value="España">España</option>
+            <option value="Austria">Austria</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Jue 2 Jul · Toronto · 18:00 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/pt.svg" alt="Portugal">
+            <span class="team-txt">Portugal</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m12_a" min="0" max="99" placeholder="" required data-match="r32_m12" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m12_b" min="0" max="99" placeholder="" required data-match="r32_m12" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/hr.svg" alt="Croacia">
+            <span class="team-txt">Croacia</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m12">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m12_pen" data-tb="r32_m12">
+            <option value="">Selecciona…</option>
+            <option value="Portugal">Portugal</option>
+            <option value="Croacia">Croacia</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Jue 2 Jul · Vancouver · 22:00 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/ch.svg" alt="Suiza">
+            <span class="team-txt">Suiza</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m13_a" min="0" max="99" placeholder="" required data-match="r32_m13" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m13_b" min="0" max="99" placeholder="" required data-match="r32_m13" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/dz.svg" alt="Argelia">
+            <span class="team-txt">Argelia</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m13">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m13_pen" data-tb="r32_m13">
+            <option value="">Selecciona…</option>
+            <option value="Suiza">Suiza</option>
+            <option value="Argelia">Argelia</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Vie 3 Jul · Dallas · 13:00 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/au.svg" alt="Australia">
+            <span class="team-txt">Australia</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m14_a" min="0" max="99" placeholder="" required data-match="r32_m14" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m14_b" min="0" max="99" placeholder="" required data-match="r32_m14" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/eg.svg" alt="Egipto">
+            <span class="team-txt">Egipto</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m14">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m14_pen" data-tb="r32_m14">
+            <option value="">Selecciona…</option>
+            <option value="Australia">Australia</option>
+            <option value="Egipto">Egipto</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Vie 3 Jul · Miami · 17:00 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/ar.svg" alt="Argentina">
+            <span class="team-txt">Argentina</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m15_a" min="0" max="99" placeholder="" required data-match="r32_m15" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m15_b" min="0" max="99" placeholder="" required data-match="r32_m15" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/cv.svg" alt="Cabo Verde">
+            <span class="team-txt">Cabo Verde</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m15">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m15_pen" data-tb="r32_m15">
+            <option value="">Selecciona…</option>
+            <option value="Argentina">Argentina</option>
+            <option value="Cabo Verde">Cabo Verde</option>
+          </select>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-date">Vie 3 Jul · Kansas City · 20:30 CDMX</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" src="https://flagcdn.com/co.svg" alt="Colombia">
+            <span class="team-txt">Colombia</span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r32_m16_a" min="0" max="99" placeholder="" required data-match="r32_m16" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r32_m16_b" min="0" max="99" placeholder="" required data-match="r32_m16" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" src="https://flagcdn.com/gh.svg" alt="Ghana">
+            <span class="team-txt">Ghana</span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r32_m16">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r32_m16_pen" data-tb="r32_m16">
+            <option value="">Selecciona…</option>
+            <option value="Colombia">Colombia</option>
+            <option value="Ghana">Ghana</option>
+          </select>
+        </div>
+      </div>
+        </div><!-- /r32 -->
+
+    <!-- ═══════════════════════════════════════
+         OCTAVOS DE FINAL
+         Bracket: M1vsM4 · M2vsM5 · M3vsM6 · M7vsM8 · M9vsM10 · M11vsM12 · M13vsM16 · M14vsM15
+    ═══════════════════════════════════════ -->
+    <div class="round-section">
+      <div class="round-header">
+        <span class="round-badge">R16</span>
+        <span class="round-title">OCTAVOS DE FINAL</span>
+        <div class="round-pts">Bonus <strong>+2 pts</strong> si atinas al equipo ganador</div>
+      </div>
+
+      <!-- O1: Gan(M1) vs Gan(M4) -->
+            <div class="match-card">
+        <div class="match-date">~Jul 4-5 Jul · Octavos 1 (P90)</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_r16_m1_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m1_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r16_m1_ga" min="0" max="99" placeholder="" required data-match="r16_m1" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r16_m1_gb" min="0" max="99" placeholder="" required data-match="r16_m1" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_r16_m1_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m1_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r16_m1">
+          <label>EMPATE – ¿Quién avanza en penales? <span class="req">*</span></label>
+          <select name="r16_m1_pen" data-tb="r16_m1" data-teams="r16_m1_a,r16_m1_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- O2: Gan(M2) vs Gan(M5) -->
+            <div class="match-card">
+        <div class="match-date">~Jul 5-6 Jul · Octavos 2 (P91)</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_r16_m2_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m2_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r16_m2_ga" min="0" max="99" placeholder="" required data-match="r16_m2" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r16_m2_gb" min="0" max="99" placeholder="" required data-match="r16_m2" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_r16_m2_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m2_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r16_m2">
+          <label>EMPATE – ¿Quién avanza en penales?</label>
+          <select name="r16_m2_pen" data-tb="r16_m2" data-teams="r16_m2_a,r16_m2_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- O3: Gan(M3) vs Gan(M6) -->
+            <div class="match-card">
+        <div class="match-date">~Jul 4-5 Jul · Octavos 3 (P89)</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_r16_m3_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m3_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r16_m3_ga" min="0" max="99" placeholder="" required data-match="r16_m3" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r16_m3_gb" min="0" max="99" placeholder="" required data-match="r16_m3" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_r16_m3_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m3_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r16_m3">
+          <label>EMPATE – ¿Quién avanza en penales?</label>
+          <select name="r16_m3_pen" data-tb="r16_m3" data-teams="r16_m3_a,r16_m3_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- O4: Gan(M7) vs Gan(M8) -->
+            <div class="match-card">
+        <div class="match-date">~Jul 5-6 Jul · Octavos 4 (P92)</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_r16_m4_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m4_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r16_m4_ga" min="0" max="99" placeholder="" required data-match="r16_m4" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r16_m4_gb" min="0" max="99" placeholder="" required data-match="r16_m4" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_r16_m4_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m4_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r16_m4">
+          <label>EMPATE – ¿Quién avanza en penales?</label>
+          <select name="r16_m4_pen" data-tb="r16_m4" data-teams="r16_m4_a,r16_m4_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- O5: Gan(M9) vs Gan(M10) -->
+            <div class="match-card">
+        <div class="match-date">~Jul 6-7 Jul · Octavos 5 (P94)</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_r16_m5_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m5_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r16_m5_ga" min="0" max="99" placeholder="" required data-match="r16_m5" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r16_m5_gb" min="0" max="99" placeholder="" required data-match="r16_m5" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_r16_m5_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m5_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r16_m5">
+          <label>EMPATE – ¿Quién avanza en penales?</label>
+          <select name="r16_m5_pen" data-tb="r16_m5" data-teams="r16_m5_a,r16_m5_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- O6: Gan(M11) vs Gan(M12) -->
+            <div class="match-card">
+        <div class="match-date">~Jul 6-7 Jul · Octavos 6 (P93)</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_r16_m6_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m6_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r16_m6_ga" min="0" max="99" placeholder="" required data-match="r16_m6" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r16_m6_gb" min="0" max="99" placeholder="" required data-match="r16_m6" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_r16_m6_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m6_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r16_m6">
+          <label>EMPATE – ¿Quién avanza en penales?</label>
+          <select name="r16_m6_pen" data-tb="r16_m6" data-teams="r16_m6_a,r16_m6_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- O7: Gan(M13) vs Gan(M16) -->
+            <div class="match-card">
+        <div class="match-date">~Jul 7-8 Jul · Octavos 7 (P96)</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_r16_m7_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m7_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r16_m7_ga" min="0" max="99" placeholder="" required data-match="r16_m7" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r16_m7_gb" min="0" max="99" placeholder="" required data-match="r16_m7" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_r16_m7_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m7_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r16_m7">
+          <label>EMPATE – ¿Quién avanza en penales?</label>
+          <select name="r16_m7_pen" data-tb="r16_m7" data-teams="r16_m7_a,r16_m7_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- O8: Gan(M14) vs Gan(M15) -->
+            <div class="match-card">
+        <div class="match-date">~Jul 7-8 Jul · Octavos 8 (P95)</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_r16_m8_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m8_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="r16_m8_ga" min="0" max="99" placeholder="" required data-match="r16_m8" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="r16_m8_gb" min="0" max="99" placeholder="" required data-match="r16_m8" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_r16_m8_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_r16_m8_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_r16_m8">
+          <label>EMPATE – ¿Quién avanza en penales?</label>
+          <select name="r16_m8_pen" data-tb="r16_m8" data-teams="r16_m8_a,r16_m8_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+    </div><!-- /r16 -->
+
+    <!-- ═══════════════════════════════════════
+         CUARTOS DE FINAL
+         QF1: Gan(O1) vs Gan(O2)   QF2: Gan(O3) vs Gan(O4)
+         QF3: Gan(O5) vs Gan(O6)   QF4: Gan(O7) vs Gan(O8)
+    ═══════════════════════════════════════ -->
+    <div class="round-section">
+      <div class="round-header">
+        <span class="round-badge">QF</span>
+        <span class="round-title">CUARTOS DE FINAL</span>
+        <div class="round-pts">Bonus <strong>+3 pts</strong> si atinas al equipo ganador</div>
+      </div>
+
+      <!-- QF1 -->
+            <div class="match-card">
+        <div class="match-date">~Jul 9 Jul · Cuarto 1 (P97)</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_qf_m1_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_qf_m1_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="qf_m1_ga" min="0" max="99" placeholder="" required data-match="qf_m1" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="qf_m1_gb" min="0" max="99" placeholder="" required data-match="qf_m1" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_qf_m1_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_qf_m1_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_qf_m1">
+          <label>EMPATE – ¿Quién avanza en penales?</label>
+          <select name="qf_m1_pen" data-tb="qf_m1" data-teams="qf_m1_a,qf_m1_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- QF2 -->
+            <div class="match-card">
+        <div class="match-date">~Jul 10 Jul · Cuarto 2 (P98)</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_qf_m2_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_qf_m2_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="qf_m2_ga" min="0" max="99" placeholder="" required data-match="qf_m2" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="qf_m2_gb" min="0" max="99" placeholder="" required data-match="qf_m2" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_qf_m2_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_qf_m2_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_qf_m2">
+          <label>EMPATE – ¿Quién avanza en penales?</label>
+          <select name="qf_m2_pen" data-tb="qf_m2" data-teams="qf_m2_a,qf_m2_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- QF3 -->
+            <div class="match-card">
+        <div class="match-date">~Jul 9 Jul · Cuarto 3 (P99)</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_qf_m3_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_qf_m3_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="qf_m3_ga" min="0" max="99" placeholder="" required data-match="qf_m3" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="qf_m3_gb" min="0" max="99" placeholder="" required data-match="qf_m3" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_qf_m3_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_qf_m3_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_qf_m3">
+          <label>EMPATE – ¿Quién avanza en penales?</label>
+          <select name="qf_m3_pen" data-tb="qf_m3" data-teams="qf_m3_a,qf_m3_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- QF4 -->
+            <div class="match-card">
+        <div class="match-date">~Jul 10 Jul · Cuarto 4 (P100)</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_qf_m4_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_qf_m4_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="qf_m4_ga" min="0" max="99" placeholder="" required data-match="qf_m4" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="qf_m4_gb" min="0" max="99" placeholder="" required data-match="qf_m4" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_qf_m4_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_qf_m4_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_qf_m4">
+          <label>EMPATE – ¿Quién avanza en penales?</label>
+          <select name="qf_m4_pen" data-tb="qf_m4" data-teams="qf_m4_a,qf_m4_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+    </div><!-- /qf -->
+
+    <!-- ═══════════════════════════════════════
+         SEMIFINALES  SF1: Gan(QF1)vsGan(QF2)  SF2: Gan(QF3)vsGan(QF4)
+    ═══════════════════════════════════════ -->
+    <div class="round-section">
+      <div class="round-header">
+        <span class="round-badge">SF</span>
+        <span class="round-title">SEMIFINALES</span>
+        <div class="round-pts">Bonus <strong>+4 pts</strong> si atinas al equipo finalista</div>
+      </div>
+
+      <!-- SF1 -->
+            <div class="match-card">
+        <div class="match-date">~Jul 14 Jul · Semifinal 1 (P101)</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_sf_m1_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_sf_m1_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="sf_m1_ga" min="0" max="99" placeholder="" required data-match="sf_m1" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="sf_m1_gb" min="0" max="99" placeholder="" required data-match="sf_m1" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_sf_m1_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_sf_m1_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_sf_m1">
+          <label>EMPATE – ¿Quién pasa a la Final?</label>
+          <select name="sf_m1_pen" data-tb="sf_m1" data-teams="sf_m1_a,sf_m1_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- SF2 -->
+            <div class="match-card">
+        <div class="match-date">~Jul 15 Jul · Semifinal 2 (P102)</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_sf_m2_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_sf_m2_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="sf_m2_ga" min="0" max="99" placeholder="" required data-match="sf_m2" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="sf_m2_gb" min="0" max="99" placeholder="" required data-match="sf_m2" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_sf_m2_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_sf_m2_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_sf_m2">
+          <label>EMPATE – ¿Quién pasa a la Final?</label>
+          <select name="sf_m2_pen" data-tb="sf_m2" data-teams="sf_m2_a,sf_m2_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+    </div><!-- /sf -->
+
+    <!-- ═══════════════════════════════════════
+         TERCER LUGAR  (perdedores SF1 y SF2)
+    ═══════════════════════════════════════ -->
+    <div class="round-section">
+      <div class="round-header">
+        <span class="round-badge">3°</span>
+        <span class="round-title">TERCER LUGAR</span>
+        <div class="round-pts">Bonus <strong>+3 pts</strong> si atinas al ganador del bronce</div>
+      </div>
+            <div class="match-card">
+        <div class="match-date">~Jul 18 · Partido por el Bronce</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_tp_m1_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_tp_m1_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="tp_m1_ga" min="0" max="99" placeholder="" required data-match="tp_m1" data-side="a">
+              <span class="score-dash-sm">–</span>
+              <input class="score-num-sm" type="number" name="tp_m1_gb" min="0" max="99" placeholder="" required data-match="tp_m1" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_tp_m1_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_tp_m1_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_tp_m1">
+          <label>EMPATE – ¿Quién se queda con el bronce en penales?</label>
+          <select name="tp_m1_pen" data-tb="tp_m1" data-teams="tp_m1_a,tp_m1_b">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         FINAL
+    ═══════════════════════════════════════ -->
+    <div class="round-section">
+      <div class="round-header">
+        <span class="round-badge" style="background:var(--amarillo);color:#000">🏆</span>
+        <span class="round-title" style="color:var(--amarillo)">FINAL</span>
+        <div class="round-pts">Bonus <strong style="color:var(--amarillo)">+5 pts</strong> si atinas al Campeón del Mundo</div>
+      </div>
+            <div class="match-card" style="border-color:rgba(240,180,41,0.35);box-shadow:0 0 24px rgba(240,180,41,0.08)">
+        <div class="match-date">19 Jul · MetLife Stadium, Nueva York/NJ 🏆</div>
+        <div class="match-body">
+          <div class="match-side">
+            <img class="flag-sm" id="flag_final_a" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_final_a"></span>
+          </div>
+          <div class="match-center">
+            <div class="score-inline">
+              <input class="score-num-sm" type="number" name="final_ga" min="0" max="99" placeholder="" required data-match="final" data-side="a">
+              <span class="score-dash-sm" style="color:var(--amarillo)">–</span>
+              <input class="score-num-sm" type="number" name="final_gb" min="0" max="99" placeholder="" required data-match="final" data-side="b">
+            </div>
+          </div>
+          <div class="match-side right">
+            <img class="flag-sm" id="flag_final_b" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="">
+            <span class="team-txt muted" id="lbl_final_b"></span>
+          </div>
+        </div>
+        <div class="tiebreak" id="tb_final">
+          <label>EMPATE – ¿Quién es CAMPEÓN en penales? <span class="req">*</span></label>
+          <select name="final_pen" data-tb="final" data-teams="final_a,final_b">
+            <option value="">Selecciona al Campeón del Mundo…</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-section">
+      <button type="submit" id="submit-btn">ENVIAR MIS PRONÓSTICOS</button>
+      <div id="status"></div>
+    </div>
+
+  </form>
+</main>
+
+<footer>Mundial 2026 · USA · México · Canadá · 11 Jun – 19 Jul 2026</footer>
+
+<script>
+// ═══════════════════════════════════════════════
+//  BRACKET STATE
+//  Stores the "winner" for each match slot
+// ═══════════════════════════════════════════════
+
+// Default team names for each R32 slot (teamA, teamB)
+const R32_TEAMS = {
+  r32_m1:  ['Sudáfrica',      'Canadá'],
+  r32_m2:  ['Brasil',         'Japón'],
+  r32_m3:  ['Alemania',       'Paraguay'],
+  r32_m4:  ['Países Bajos',   'Marruecos'],
+  r32_m5:  ['Costa de Marfil','Noruega'],
+  r32_m6:  ['Francia',        'Suecia'],
+  r32_m7:  ['México',         'Ecuador'],
+  r32_m8:  ['Inglaterra',     'Congo RD'],
+  r32_m9:  ['Bélgica',        'Senegal'],
+  r32_m10: ['Estados Unidos', 'Bosnia-Herz.'],
+  r32_m11: ['España',         'Austria'],
+  r32_m12: ['Portugal',       'Croacia'],
+  r32_m13: ['Suiza',          'Argelia'],
+  r32_m14: ['Australia',      'Egipto'],
+  r32_m15: ['Argentina',      'Cabo Verde'],
+  r32_m16: ['Colombia',       'Ghana'],
+};
+
+// winner[slot] = team name string (or null if unknown)
+const winner = {};
+
+// Bracket wiring: each downstream slot maps to [sourceA, sourceB]
+// slots are identified as "r32_m1"…"r32_m16", "r16_m1"…"r16_m8", "qf_m1"…"qf_m4", "sf_m1","sf_m2","tp_m1","final"
+// Bracket según FIFA oficial:
+// P89=O3(GER/PAR vs FRA/SWE) P90=O1(RSA/CAN vs NED/MAR)
+// P91=O2(BRA/JPN vs CIV/NOR) P92=O4(MEX/ECU vs ENG/COD)
+// P93=O6(POR/CRO vs ESP/AUT) P94=O5(USA/BIH vs BEL/SEN)
+// P95=O8(ARG/CPV vs AUS/EGY) P96=O7(SUI/ALG vs COL/GHA)
+// QF: P97=P89vsP90, P98=P93vsP94, P99=P91vsP92, P100=P95vsP96
+// SF: P101=P97vsP99, P102=P98vsP100
+const BRACKET = {
+  // Octavos (orden según FIFA)
+  r16_m1: { a: 'r32_m1',  b: 'r32_m4'  }, // O1: RSA/CAN vs NED/MAR → P90
+  r16_m2: { a: 'r32_m2',  b: 'r32_m5'  }, // O2: BRA/JPN vs CIV/NOR → P91
+  r16_m3: { a: 'r32_m3',  b: 'r32_m6'  }, // O3: GER/PAR vs FRA/SWE → P89
+  r16_m4: { a: 'r32_m7',  b: 'r32_m8'  }, // O4: MEX/ECU vs ENG/COD → P92
+  r16_m5: { a: 'r32_m10', b: 'r32_m9'  }, // O5: USA/BIH vs BEL/SEN → P94
+  r16_m6: { a: 'r32_m12', b: 'r32_m11' }, // O6: POR/CRO vs ESP/AUT → P93
+  r16_m7: { a: 'r32_m13', b: 'r32_m16' }, // O7: SUI/ALG vs COL/GHA → P96
+  r16_m8: { a: 'r32_m15', b: 'r32_m14' }, // O8: ARG/CPV vs AUS/EGY → P95
+  // Cuartos: P97=O3vsO1, P98=O6vsO5, P99=O2vsO4, P100=O8vsO7
+  qf_m1:  { a: 'r16_m3',  b: 'r16_m1'  }, // QF1 P97: O3 vs O1
+  qf_m2:  { a: 'r16_m6',  b: 'r16_m5'  }, // QF2 P98: O6 vs O5
+  qf_m3:  { a: 'r16_m2',  b: 'r16_m4'  }, // QF3 P99: O2 vs O4
+  qf_m4:  { a: 'r16_m8',  b: 'r16_m7'  }, // QF4 P100: O8 vs O7
+  // Semis: P101=QF1vsQF2, P102=QF3vsQF4
+  sf_m1:  { a: 'qf_m1',   b: 'qf_m2'   }, // SF1 P101
+  sf_m2:  { a: 'qf_m3',   b: 'qf_m4'   }, // SF2 P102
+  // Tercer lugar (losers of semis)
+  tp_m1:  { a: 'sf_m1_loser', b: 'sf_m2_loser' },
+  // Final
+  final:  { a: 'sf_m1',   b: 'sf_m2'   },
+};
+
+// ── Determine the winner of a match given its scores/tie-break ──
+function computeWinner(matchId) {
+  const gaEl = document.querySelector(`[name="${matchId}_ga"], [name="${matchId}_a"]`);
+  const gbEl = document.querySelector(`[name="${matchId}_gb"], [name="${matchId}_b"]`);
+  const penEl = document.querySelector(`[name="${matchId}_pen"]`);
+
+  if (!gaEl || !gbEl) return null;
+  const ga = gaEl.value === '' ? null : parseInt(gaEl.value, 10);
+  const gb = gbEl.value === '' ? null : parseInt(gbEl.value, 10);
+  if (ga === null || gb === null) return null;
+
+  // For R32, team names come from R32_TEAMS; for later rounds, from labels
+  let teamA, teamB;
+  if (R32_TEAMS[matchId]) {
+    [teamA, teamB] = R32_TEAMS[matchId];
+  } else {
+    const lblA = document.getElementById('lbl_' + matchId + '_a');
+    const lblB = document.getElementById('lbl_' + matchId + '_b');
+    teamA = lblA ? lblA.textContent.trim() : null;
+    teamB = lblB ? lblB.textContent.trim() : null;
+    if (!teamA || !teamB) return null;
+  }
+
+  if (ga > gb) return teamA;
+  if (gb > ga) return teamB;
+  // Tie → check pen select
+  if (penEl && penEl.value) return penEl.value;
+  return null; // tie not resolved yet
+}
+
+// Also compute the loser (for 3rd place)
+function computeLoser(matchId) {
+  const w = computeWinner(matchId);
+  if (!w) return null;
+  const lblA = document.getElementById('lbl_' + matchId + '_a');
+  const lblB = document.getElementById('lbl_' + matchId + '_b');
+  let teamA = lblA ? lblA.textContent.trim() : null;
+  let teamB = lblB ? lblB.textContent.trim() : null;
+  if (R32_TEAMS[matchId]) [teamA, teamB] = R32_TEAMS[matchId];
+  if (!teamA || !teamB) return null;
+  return w === teamA ? teamB : teamA;
+}
+
+// ── FLAG LOOKUP: team name → flagcdn ISO code ──
+const FLAG_CODES = {
+  'Sudáfrica': 'za', 'Canadá': 'ca', 'Brasil': 'br', 'Japón': 'jp',
+  'Alemania': 'de', 'Paraguay': 'py', 'Países Bajos': 'nl', 'Marruecos': 'ma',
+  'Costa de Marfil': 'ci', 'Noruega': 'no', 'Francia': 'fr', 'Suecia': 'se',
+  'México': 'mx', 'Ecuador': 'ec', 'Inglaterra': 'gb-eng', 'Congo RD': 'cd',
+  'Bélgica': 'be', 'Senegal': 'sn', 'Estados Unidos': 'us', 'Bosnia-Herz.': 'ba',
+  'España': 'es', 'Austria': 'at', 'Portugal': 'pt', 'Croacia': 'hr',
+  'Suiza': 'ch', 'Argelia': 'dz', 'Australia': 'au', 'Egipto': 'eg',
+  'Argentina': 'ar', 'Cabo Verde': 'cv', 'Colombia': 'co', 'Ghana': 'gh',
+};
+
+// ── Update a label element AND its flag ──
+function setLabel(id, text) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (text) {
+    el.textContent = text;
+    el.classList.remove('muted');
+  } else {
+    el.classList.add('muted');
+  }
+  // id is like "lbl_r16_m1_a" → flag id is "flag_r16_m1_a"
+  const flagId = 'flag_' + id.replace(/^lbl_/, '');
+  const flagEl = document.getElementById(flagId);
+  if (flagEl) {
+    const code = text && FLAG_CODES[text];
+    if (code) {
+      flagEl.src = `https://flagcdn.com/${code}.svg`;
+      flagEl.alt = text;
+      flagEl.style.opacity = '1';
+    } else {
+      flagEl.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
+      flagEl.style.opacity = '0';
+    }
+  }
+}
+
+// ── Rebuild the tiebreak select options for a dynamic match ──
+function rebuildTiebreakSelect(matchId, teamA, teamB) {
+  const sel = document.querySelector(`select[data-tb="${matchId}"]`);
+  if (!sel || !sel.dataset.teams) return; // R32 selects are static, skip
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">Selecciona…</option>';
+  if (teamA) sel.innerHTML += `<option value="${teamA}">${teamA}</option>`;
+  if (teamB) sel.innerHTML += `<option value="${teamB}">${teamB}</option>`;
+  if (cur && (cur === teamA || cur === teamB)) sel.value = cur;
+}
+
+// ── Cascade updates from a match downward ──
+function cascadeFrom(matchId) {
+  // Recompute this match's winner
+  winner[matchId] = computeWinner(matchId);
+
+  // Find all downstream matches that use this as a source
+  for (const [downMatch, src] of Object.entries(BRACKET)) {
+    let changed = false;
+
+    if (src.a === matchId) {
+      const t = winner[matchId] || null;
+      setLabel('lbl_' + downMatch + '_a', t);
+      rebuildTiebreakSelect(downMatch, t, document.getElementById('lbl_' + downMatch + '_b')?.textContent?.trim());
+      changed = true;
+    }
+    if (src.b === matchId) {
+      const t = winner[matchId] || null;
+      setLabel('lbl_' + downMatch + '_b', t);
+      rebuildTiebreakSelect(downMatch,
+        document.getElementById('lbl_' + downMatch + '_a')?.textContent?.trim(), t);
+      changed = true;
+    }
+    // 3rd place uses losers
+    if (downMatch === 'tp_m1') {
+      if (matchId === 'sf_m1' || matchId === 'sf_m2') {
+        const loser1 = computeLoser('sf_m1');
+        const loser2 = computeLoser('sf_m2');
+        setLabel('lbl_tp_m1_a', loser1);
+        setLabel('lbl_tp_m1_b', loser2);
+        rebuildTiebreakSelect('tp_m1', loser1, loser2);
+        changed = true;
+      }
+    }
+
+    if (changed) {
+      // Also cascade downward from this downstream match
+      winner[downMatch] = computeWinner(downMatch);
+      cascadeFrom(downMatch);
+    }
+  }
+}
+
+// ── TIEBREAK VISIBILITY + cascade ──
+document.addEventListener('input', function(e) {
+  const el = e.target;
+
+  // Score input
+  if (el.dataset.match && el.dataset.side) {
+    const matchId = el.dataset.match;
+    const gaEl = document.querySelector(`[name="${matchId}_ga"], [name="${matchId}_a"]`);
+    const gbEl = document.querySelector(`[name="${matchId}_gb"], [name="${matchId}_b"]`);
+    const tb   = document.getElementById('tb_' + matchId);
+
+    if (gaEl && gbEl && tb) {
+      const a = gaEl.value === '' ? null : parseInt(gaEl.value, 10);
+      const b = gbEl.value === '' ? null : parseInt(gbEl.value, 10);
+      if (a !== null && b !== null && a === b) {
+        tb.classList.add('visible');
+        tb.querySelector('select').required = true;
+      } else {
+        tb.classList.remove('visible');
+        const sel = tb.querySelector('select');
+        sel.required = false;
+        sel.value = '';
+      }
+    }
+    cascadeFrom(matchId);
+  }
+
+  // Pen select (also triggers cascade)
+  if (el.tagName === 'SELECT' && el.dataset.tb) {
+    cascadeFrom(el.dataset.tb);
+  }
+});
+
+// ── FORM SUBMIT ──
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyPEb-HsfXO17XpbTwZEq7eo022uCLea8boT9VUr_W5_jePkxdK5lKzSF31cJPOI9RCnw/exec';
+
+document.getElementById('quiniela-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn    = document.getElementById('submit-btn');
+  const status = document.getElementById('status');
+  btn.disabled = true;
+  btn.textContent = 'ENVIANDO…';
+  status.className = '';
+  status.style.display = 'none';
+
+  const data = Object.fromEntries(new FormData(this));
+  data.timestamp = new Date().toISOString();
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      mode: 'no-cors'
+    });
+    status.className = 'ok';
+    status.textContent = '✅ ¡Pronósticos enviados! Buena suerte ' + (data.nombre || '') + ' 🏆';
+    status.style.display = 'block';
+    btn.textContent = '✅ ENVIADO';
+    this.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+    status.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } catch (err) {
+    status.className = 'err';
+    status.textContent = '❌ Error al enviar. Verifica tu conexión e intenta de nuevo.';
+    status.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'REINTENTAR ENVÍO';
+  }
+});
+</script>
+</body>
+</html>
