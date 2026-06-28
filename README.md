@@ -1,0 +1,1 @@
+# pronostico_elim_2026
